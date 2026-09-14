@@ -1,20 +1,27 @@
 const toggle = document.querySelector('.menu-toggle');
 const mobileNav = document.querySelector('.mobile-nav');
 
+function closeMenu() {
+  mobileNav?.classList.remove('open');
+  toggle?.setAttribute('aria-expanded', 'false');
+}
+
 toggle?.addEventListener('click', () => {
-  const open = mobileNav.classList.toggle('open');
-  toggle.setAttribute('aria-expanded', open);
+  const isOpen = mobileNav?.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
 });
 
-document.querySelectorAll('.mobile-nav a').forEach(link => link.addEventListener('click', () => {
-  mobileNav.classList.remove('open');
-  toggle.setAttribute('aria-expanded', 'false');
-}));
+document.querySelectorAll('.mobile-nav a').forEach(link => link.addEventListener('click', closeMenu));
 
-document.querySelector('.contact-form')?.addEventListener('submit', event => {
+document.querySelector('#contact-form')?.addEventListener('submit', event => {
   event.preventDefault();
-  const button = event.currentTarget.querySelector('button');
-  const note = event.currentTarget.querySelector('.form-note');
-  button.innerHTML = 'Takk for forespørselen <span>✓</span>';
-  note.textContent = 'Dette er en forhåndsvisning – ring oss gjerne direkte på 981 24 042.';
+  const form = event.currentTarget;
+  const note = form.querySelector('.form-note');
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+  const button = form.querySelector('button');
+  button.innerHTML = 'Takk for henvendelsen <span>✓</span>';
+  note.textContent = 'Dette er en forhåndsvisning. Ring 981 24 042 for direkte kontakt.';
 });
